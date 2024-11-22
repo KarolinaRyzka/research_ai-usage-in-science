@@ -2432,6 +2432,27 @@ doc = ["reno", "sphinx"]
 test = ["pytest", "tornado (>=4.5)", "typeguard"]
 
 [[package]]
+name = "tqdm"
+version = "4.67.0"
+description = "Fast, Extensible Progress Meter"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tqdm-4.67.0-py3-none-any.whl", hash = "sha256:0cd8af9d56911acab92182e88d763100d4788bdf421d251616040cc4d44863be"},
+    {file = "tqdm-4.67.0.tar.gz", hash = "sha256:fe5a6f95e6fe0b9755e9469b77b9c3cf850048224ecaa8293d7d2d31f97d869a"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout", "pytest-xdist"]
+discord = ["requests"]
+notebook = ["ipywidgets (>=6)"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+
+[[package]]
 name = "typedframe"
 version = "0.11.0"
 description = "Typed Wrappers over Pandas and Polars DataFrames with schema validation"
@@ -2621,4 +2642,4 @@ tatsu = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "123a337cdf5be0f072918dc847754cd1a2127aefa59ca491f00de268b3894734"
+content-hash = "f4b6a282bb51d4ccdb961db1b203f7ad6fba69d1d1668eaa6235cfed1d0503f5"

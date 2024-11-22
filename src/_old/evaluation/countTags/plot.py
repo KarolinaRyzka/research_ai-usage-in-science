@@ -34,6 +34,7 @@ def plotResults(df: DataFrame, fp: Path) -> None:
     plt.xticks(rotation=50, ha="right")
 
     plt.tight_layout()
+    plt.show()
     plt.savefig(fp)
     plt.clf()
 
