@@ -4,10 +4,10 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import List
 
-from pandas import DataFrame, Series
-from progress.bar import Bar
+# from pandas import DataFrame, Series
+# from progress.bar import Bar
 
-from src.classes.journalGeneric import Journal_ABC
+# from src.classes.journalGeneric import Journal_ABC
 
 
 def ifFileExistsExit(fps: List[Path]) -> None:
@@ -41,37 +41,37 @@ def storeStringInTempFile(string: str) -> str:
     return tfName
 
 
-def extractDOIsFromHTML(source: Journal_ABC, df: DataFrame) -> DataFrame:
-    data: dict[str, List[str | int]] = {
-        "urls": [],
-        "query": [],
-        "year": [],
-        "journal": [],
-    }
+# def extractDOIsFromHTML(source: Journal_ABC, df: DataFrame) -> DataFrame:
+#     data: dict[str, List[str | int]] = {
+#         "urls": [],
+#         "query": [],
+#         "year": [],
+#         "journal": [],
+#     }
 
-    with Bar(
-        "Extracting paper URLs from search results...",
-        max=df.shape[0],
-    ) as bar:
-        row: Series
-        for _, row in df.iterrows():
-            urls: List[str] = source.extractPaperURLsFromSearchResult(
-                respContent=row["html"]
-            )
+#     with Bar(
+#         "Extracting paper URLs from search results...",
+#         max=df.shape[0],
+#     ) as bar:
+#         row: Series
+#         for _, row in df.iterrows():
+#             urls: List[str] = source.extractPaperURLsFromSearchResult(
+#                 respContent=row["html"]
+#             )
 
-            url: str
-            for url in urls:
-                data["urls"].append(url)
-                data["query"].append(row["query"])
-                data["year"].append(row["year"])
-                data["journal"].append(row["journal"])
+#             url: str
+#             for url in urls:
+#                 data["urls"].append(url)
+#                 data["query"].append(row["query"])
+#                 data["year"].append(row["year"])
+#                 data["journal"].append(row["journal"])
 
-            bar.next()
+#             bar.next()
 
-        urlsDF: DataFrame = DataFrame(data=data)
+#         urlsDF: DataFrame = DataFrame(data=data)
 
-        urlsDF["urls"] = urlsDF["urls"].apply(
-            lambda x: f"https://doi.org/{source.extractDOIFromPaper(url=x)}"
-        )
+#         urlsDF["urls"] = urlsDF["urls"].apply(
+#             lambda x: f"https://doi.org/{source.extractDOIFromPaper(url=x)}"
+#         )
 
-    return urlsDF
+#     return urlsDF

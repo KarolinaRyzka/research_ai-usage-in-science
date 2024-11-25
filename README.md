@@ -10,6 +10,12 @@
   - [About](#about)
   - [Dependencies](#dependencies)
   - [How to Install](#how-to-install)
+  - [How to Run](#how-to-run)
+    - [Instructions For Getting Data](#instructions-for-getting-data)
+    - [Instructions For Analyzing Data](#instructions-for-analyzing-data)
+      - [Total Number of Documents per Year](#total-number-of-documents-per-year)
+      - [Total Number of Natural Science Documents per Year](#total-number-of-natural-science-documents-per-year)
+      - [Comparison of the Total Number of Documents and Total Number of Natural Science Documents](#comparison-of-the-total-number-of-documents-and-total-number-of-natural-science-documents)
   - [How to Contribute](#how-to-contribute)
   - [Project Tutorial](#project-tutorial)
     - [Reimplementing From Existing Dataset](#reimplementing-from-existing-dataset)
@@ -48,6 +54,60 @@ different architectures.
 1. `git clone https://github.com/NicholasSynovic/research_ai-usage-in-science`
 1. `make create-dev`
 1. `make build`
+
+## How to Run
+
+This project is designed to run as a pipeline, where the output of one script is
+the input into another. The pipeline is described as:
+
+```shell
+aius-search-journal | aius-extract-documents | aius-filter-documents | aius-sample-documents | aius-download-documents
+```
+
+In practice, there exists command line arguements for each of these executables.
+
+### Instructions For Getting Data
+
+1. Search journals for papers that match the following search queries from 2014
+   to 2024:
+
+   ```text
+   "Deep Learning",
+   "Deep Neural Network",
+   "Hugging Face",
+   "HuggingFace",
+   "Model Checkpoint",
+   "Model Weights",
+   "Pre-Trained Model",
+   ```
+
+   Command:
+   `aius-search-journal --journal plos --output data/plos_search_results.parquet`
+
+1. Convert search results into parsable data and extract useful metadata
+
+   Command:
+   `aius-extract-documents --input data/plos_search_results.parquet --output data/plos_search_result_documents.parquet`
+
+1. Filter documents through OpenAlex for Natural Science only documents
+
+   Command:
+   `aius-filter-documents --input data/plos_search_result_documents.parquet --output data/plos_search_result_filtered_documents.parquet --email $EMAIL`
+
+   **NOTE**: Replace `$EMAIL` with your email address
+
+### Instructions For Analyzing Data
+
+#### Total Number of Documents per Year
+
+To generate a plot of the total number of documets per year, run the following
+command:
+
+An example output would be:
+
+#### Total Number of Natural Science Documents per Year
+
+#### Comparison of the Total Number of Documents and Total Number of Natural Science Documents
 
 ## How to Contribute
 
