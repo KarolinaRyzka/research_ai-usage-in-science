@@ -2642,4 +2642,4 @@ tatsu = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f4b6a282bb51d4ccdb961db1b203f7ad6fba69d1d1668eaa6235cfed1d0503f5"
+content-hash = "0b5385f2ac5af244dcdc50c6622110a4c8d78404768f978fc439cca989ddfc9d"
