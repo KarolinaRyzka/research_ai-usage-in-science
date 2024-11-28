@@ -5,41 +5,48 @@ import pandas
 from pandas import DataFrame, Series
 
 
-def countPapersThatUseDL(df: DataFrame) -> DataFrame:
-    counts: Series = df["UsesDL"].value_counts()
-    print("Papers That Use DL:", counts["Yes"])
-    print("Papers That Do Not Use DL:", counts["No"])
+def countModelArchByYear(df: DataFrame, modelColumn, dateColumn) -> Series:
+    df[dateColumn] = pandas.to_datetime(df[dateColumn], errors="coerce")
 
-    return df[df["UsesDL"] == "Yes"]
+    # Extract the year from the date column
+    df["Year"] = df[dateColumn].dt.year
 
+    # Combine all rows in the model_column, splitting by newline
+    expandedRows = (
+        df[[modelColumn, "Year"]]
+        .dropna()
+        .assign(Models=lambda x: x[modelColumn].str.split("\n"))
+        .explode("Models")
+    )
 
-def countModelArch(df: DataFrame, column) -> Series:
-    getAllArch = "\n".join(df[column].dropna()).split("\n")
+    # Remove numbering and clean up spaces
+    expandedRows["Models"] = (
+        expandedRows["Models"].str.split(". ", n=1).str[-1].str.strip()
+    )
+
+    # Group by year and count occurrences of each unique model
+    model_counts_by_year = (
+        expandedRows.groupby(["Year", "Models"])
+        .size()
+        .reset_index(name="Count")
+        .sort_values(by=["Year", "Count"], ascending=[True, False])
+    )
+
+    return model_counts_by_year
+
+    getAllArch = "\n".join(df[modelColumn].dropna()).split("\n")
     cleanedData = [model.split(". ", 1)[-1].strip() for model in getAllArch]
     counts = Series(cleanedData).value_counts()
 
     return counts
 
 
-def countReuseMethods(df: DataFrame) -> DataFrame:
-    data: dict[str, int] = {
-        "Conceptual": 0,
-        "Adaptation": 0,
-        "Deployment": 0,
-    }
+def countModelArch(df: DataFrame, modelColumn) -> Series:
+    getAllArch = "\n".join(df[modelColumn].dropna()).split("\n")
+    cleanedData = [model.split(". ", 1)[-1].strip() for model in getAllArch]
+    counts = Series(cleanedData).value_counts()
 
-    df = df.copy(deep=True)
-
-    df["ReuseMethod"] = df["ReuseMethod"].str.replace(
-        pat="Adaption",
-        repl="Adaptation",
-    )
-
-    data["Conceptual"] = df["ReuseMethod"].str.count(pat="Conceptual").sum()
-    data["Adaptation"] = df["ReuseMethod"].str.count(pat="Adaptation").sum()
-    data["Deployment"] = df["ReuseMethod"].str.count(pat="Deployment").sum()
-
-    return df
+    return counts
 
 
 @click.command()
@@ -74,14 +81,19 @@ def main(slr: Path) -> None:
     )
 
     df["Ignore"] = df["Ignore"].astype(bool)
-    keepDF: DataFrame = df[df["Ignore"] == False]  # noqa: E712
 
-    # dlDF: DataFrame = countPapersThatUseDL(df=keepDF)
-    counts = countModelArch(df=keepDF, column="Model Architectures")
-    # print(counts)
-    with pandas.option_context("display.max_rows", None):
-        print(counts)
-    # dlDF = countReuseMethods(df=dlDF)
+    results = countModelArchByYear(
+        df, "Model Architectures", "Paper Publication Date"
+    )
+
+    # Print the full DataFrame without truncation
+    pandas.set_option("display.max_rows", None)
+    print(results)
+
+    # counts = countModelArch(df=keepDF, column="Model Architectures")
+
+    # with pandas.option_context("display.max_rows", None):
+    #     print(counts)
 
 
 if __name__ == "__main__":
