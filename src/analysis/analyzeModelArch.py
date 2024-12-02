@@ -6,7 +6,7 @@ from pandas import DataFrame, Series
 
 
 def countModelArchByYear(df: DataFrame, modelColumn, dateColumn) -> Series:
-    df[dateColumn] = pandas.to_datetime(df[dateColumn], errors="coerce")
+    df[dateColumn] = pandas.to_datetime(df[dateColumn])
 
     # Extract the year from the date column
     df["Year"] = df[dateColumn].dt.year
@@ -19,12 +19,12 @@ def countModelArchByYear(df: DataFrame, modelColumn, dateColumn) -> Series:
         .explode("Models")
     )
 
-    # Remove numbering and clean up spaces
+    # df clean up
     expandedRows["Models"] = (
         expandedRows["Models"].str.split(". ", n=1).str[-1].str.strip()
     )
 
-    # Group by year and count occurrences of each unique model
+    # Group by year and unique models
     model_counts_by_year = (
         expandedRows.groupby(["Year", "Models"])
         .size()
@@ -70,6 +70,7 @@ def main(slr: Path) -> None:
         sheet_name="Form1",
         engine="openpyxl",
     )
+    df["Ignore"] = df["Ignore"].astype(bool)
     df.columns = df.columns.str.strip()
     df = df.rename(
         columns={
@@ -79,8 +80,7 @@ def main(slr: Path) -> None:
             "Deep Learning Model(s) Used": "Model Architectures",
         }
     )
-
-    df["Ignore"] = df["Ignore"].astype(bool)
+    df = df[~df["Ignore"]]  # don't count columns marked with ignore - ~not
 
     results = countModelArchByYear(
         df, "Model Architectures", "Paper Publication Date"
