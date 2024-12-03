@@ -44,6 +44,53 @@ def countModalitiesPerYear(df):
     return modalityCounts
 
 
+def plotIntervalTree(df, ax=None):
+    modalities = df["Modality"].unique()
+    modality_to_y = {modality: idx for idx, modality in enumerate(modalities)}
+
+    # Plot setup
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(12, 8))
+
+    # Plot intervals or dots
+    for _, row in df.iterrows():
+        year = row["Year Published"]
+        modality = row["Modality"]
+        count = row["Count"]
+        y_pos = modality_to_y[modality]
+
+        if count == 1:
+            # Plot a dot for count = 1
+            ax.plot(year, y_pos, "ko", markersize=4)
+            ax.text(
+                year,
+                y_pos + 0.1,
+                f"{count}",
+                ha="center",
+                va="bottom",
+                fontsize=8,
+            )
+        else:
+            # Plot a line for count > 1
+            ax.plot([year, year + 1], [y_pos, y_pos], "k-", lw=2)
+            ax.text(
+                year + 0.5,
+                y_pos + 0.1,
+                f"{count}",
+                ha="center",
+                va="bottom",
+                fontsize=8,
+            )
+
+    # Set y-axis labels to modalities
+    ax.set_yticks(list(modality_to_y.values()))
+    ax.set_yticklabels(list(modality_to_y.keys()))
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Modality")
+    ax.set_title("Modalities Distribution Over Years")
+    plt.show()
+
+
 def plotModalitiesPerYear(modalityCountsDF):
     # split data
     modalityCounts = modalityCountsDF.groupby("Modality")["Count"].count()
@@ -168,8 +215,9 @@ def main(slr: Path) -> None:
 
     # Print the full DataFrame without truncation
     pandas.set_option("display.max_rows", None)
-
-    plotModalitiesPerYear2(modalitiesPerYear)
+    # print(modalitiesPerYear)
+    plotIntervalTree(modalitiesPerYear)
+    # plotModalitiesPerYear2(modalitiesPerYear)
     # plotModalities(modalityCounts)
 
 
