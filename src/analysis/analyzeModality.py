@@ -50,7 +50,7 @@ def plotIntervalTree(df, ax=None):
 
     # Plot setup
     if ax is None:
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(10, 12))
 
     # Plot intervals or dots
     for _, row in df.iterrows():
@@ -60,7 +60,7 @@ def plotIntervalTree(df, ax=None):
         y_pos = modality_to_y[modality]
 
         if count == 1:
-            # Plot a dot for count = 1
+            # dot for one
             ax.plot(year, y_pos, "ko", markersize=4)
             ax.text(
                 year,
@@ -71,7 +71,7 @@ def plotIntervalTree(df, ax=None):
                 fontsize=8,
             )
         else:
-            # Plot a line for count > 1
+            # line for >1
             ax.plot([year, year + 1], [y_pos, y_pos], "k-", lw=2)
             ax.text(
                 year + 0.5,
@@ -82,7 +82,7 @@ def plotIntervalTree(df, ax=None):
                 fontsize=8,
             )
 
-    # Set y-axis labels to modalities
+    # y axis is modality types
     ax.set_yticks(list(modality_to_y.values()))
     ax.set_yticklabels(list(modality_to_y.keys()))
     ax.set_xlabel("Year")
