@@ -92,52 +92,6 @@ def plotIntervalTree(df, ax=None):
 
 
 def plotModalitiesPerYear(modalityCountsDF):
-    # split data
-    modalityCounts = modalityCountsDF.groupby("Modality")["Count"].count()
-    singleModalities = modalityCounts[modalityCounts == 1].index
-    multipleModalities = modalityCounts[modalityCounts > 1].index
-
-    # Set up the palette
-    palette = sns.color_palette(
-        "tab20", n_colors=len(modalityCountsDF["Modality"].unique())
-    )
-
-    # line plot for modalities that occur more than once
-    plt.figure(figsize=(12, 8))
-    sns.lineplot(
-        data=modalityCountsDF[
-            modalityCountsDF["Modality"].isin(multipleModalities)
-        ],
-        x="Year Published",
-        y="Count",
-        hue="Modality",
-        palette=palette,
-        legend="full",
-    )
-
-    # scatter plot for single modalities
-    sns.scatterplot(
-        data=modalityCountsDF[
-            modalityCountsDF["Modality"].isin(singleModalities)
-        ],
-        x="Year Published",
-        y="Count",
-        hue="Modality",
-        palette=palette,
-        legend=False,
-        s=50,  # Size of the scatter points
-        marker="o",
-    )
-
-    plt.title("Total Counts of Data Modalities across the SLR by Year")
-    plt.xlabel("Year Published")
-    plt.ylabel("Total Count")
-    plt.grid(True, linestyle="--", alpha=1)
-    plt.tight_layout()
-    plt.show()
-
-
-def plotModalitiesPerYear2(modalityCountsDF):
     palette = sns.color_palette("tab20", n_colors=len(modalityCountsDF))
     sns.lineplot(
         data=modalityCountsDF,
@@ -210,15 +164,11 @@ def main(slr: Path) -> None:
     )
     df.columns = df.columns.str.strip()
 
-    # modalityCounts = countModalities(df)
-    modalitiesPerYear = countModalitiesPerYear(df)
+    modalityCounts = countModalities(df)
+    plotModalities(modalityCounts)
 
-    # Print the full DataFrame without truncation
-    pandas.set_option("display.max_rows", None)
-    # print(modalitiesPerYear)
-    plotIntervalTree(modalitiesPerYear)
-    # plotModalitiesPerYear2(modalitiesPerYear)
-    # plotModalities(modalityCounts)
+    # modalitiesPerYear = countModalitiesPerYear(df)
+    # plotIntervalTree(modalitiesPerYear)
 
 
 if __name__ == "__main__":
