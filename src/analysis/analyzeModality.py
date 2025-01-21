@@ -109,17 +109,24 @@ def plotModalitiesPerYear(modalityCountsDF):
     plt.show()
 
 
+def wrapLabel(label, width=20):
+    return "\n".join(label.split()[:2]) if len(label.split()) > 1 else label
+
+
 def plotModalities(modalityCounts):
     palette = sns.color_palette("tab20", n_colors=len(modalityCounts))
     dfSorted = modalityCounts.sort_values(by="Count", ascending=False).head(5)
 
+    # Apply the wrapping function to the y-axis labels
+    dfSorted["Modality"] = dfSorted["Modality"].apply(wrapLabel)
+
     plot = sns.barplot(data=dfSorted, x="Count", y="Modality", palette=palette)
 
     # Add labels on the bars
-    for bar in plot.patches:  # Iterate over the bars
-        bar_width = bar.get_width()  # Get the width (horizontal bar)
+    for bar in plot.patches:
+        bar_width = bar.get_width()
         plot.annotate(
-            f"{int(bar_width)}",  # Text to display
+            f"{int(bar_width)}",
             (
                 bar_width,
                 bar.get_y() + bar.get_height() / 2,
@@ -130,14 +137,12 @@ def plotModalities(modalityCounts):
             color="black",
         )
 
-    # Customize labels and title
     plt.xlabel("Count")
-    plt.ylabel("Modality")
+    plt.ylabel("Modality", labelpad=20)
     plt.title("Top 5 Modalities identified across the SLR")
     plt.gca().xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-    plt.tight_layout()  # Adjust layout to fit everything nicely
+    plt.tight_layout()
 
-    # Show the plot
     plt.show()
 
 
