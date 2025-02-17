@@ -2,25 +2,8 @@ from pathlib import Path
 
 import click
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
 import pandas
-import seaborn as sns
 from pandas import DataFrame
-
-
-def countModalities(df):
-    all_modalities = (
-        df["Modality"]
-        .dropna()
-        .str.split(",")
-        .explode()
-        .str.strip()  # split up items in cell by ",""
-    )
-
-    modalityCounts = all_modalities.value_counts().reset_index()
-    modalityCounts.columns = ["Modality", "Count"]
-
-    return modalityCounts
 
 
 def countModalitiesPerYear(df):
@@ -44,7 +27,7 @@ def countModalitiesPerYear(df):
     return modalityCounts
 
 
-def plotIntervalTree(df, ax=None):
+def plotIntervalTree(df, outputPath, ax=None):
     modalities = df["Modality"].unique()
     modality_to_y = {modality: idx for idx, modality in enumerate(modalities)}
 
@@ -88,62 +71,11 @@ def plotIntervalTree(df, ax=None):
     ax.set_xlabel("Year")
     ax.set_ylabel("Modality")
     ax.set_title("Modalities Distribution Over Years")
-    plt.show()
-
-
-def plotModalitiesPerYear(modalityCountsDF):
-    palette = sns.color_palette("tab20", n_colors=len(modalityCountsDF))
-    sns.lineplot(
-        data=modalityCountsDF,
-        x="Year Published",
-        y="Count",
-        hue="Modality",
-        palette=palette,
-    )
-
-    plt.title("Total Counts of Data Modalities across the SLR by Year")
-    plt.xlabel("Year")
-    plt.ylabel("Total Count")
-    plt.grid(True, linestyle="--", alpha=1)
-    plt.tight_layout()
-    plt.show()
+    plt.savefig(outputPath)
 
 
 def wrapLabel(label, width=20):
     return "\n".join(label.split()[:2]) if len(label.split()) > 1 else label
-
-
-def plotModalities(modalityCounts):
-    palette = sns.color_palette("tab20", n_colors=len(modalityCounts))
-    dfSorted = modalityCounts.sort_values(by="Count", ascending=False).head(5)
-
-    # Apply the wrapping function to the y-axis labels
-    dfSorted["Modality"] = dfSorted["Modality"].apply(wrapLabel)
-
-    plot = sns.barplot(data=dfSorted, x="Count", y="Modality", palette=palette)
-
-    # Add labels on the bars
-    for bar in plot.patches:
-        bar_width = bar.get_width()
-        plot.annotate(
-            f"{int(bar_width)}",
-            (
-                bar_width,
-                bar.get_y() + bar.get_height() / 2,
-            ),  # Position: slightly right of the bar
-            ha="left",
-            va="center",
-            fontsize=10,
-            color="black",
-        )
-
-    plt.xlabel("Count")
-    plt.ylabel("Modality", labelpad=20)
-    plt.title("Top 5 Modalities identified across the SLR")
-    plt.gca().xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-    plt.tight_layout()
-
-    plt.show()
 
 
 @click.command()
@@ -161,7 +93,22 @@ def plotModalities(modalityCounts):
         path_type=Path,
     ),
 )
-def main(slr: Path) -> None:
+@click.option(
+    "-o",
+    "--output",
+    "outputPath",
+    nargs=1,
+    required=True,
+    help="Path to write figure to",
+    type=click.Path(
+        exists=False,
+        file_okay=True,
+        writable=True,
+        resolve_path=True,
+        path_type=Path,
+    ),
+)
+def main(slr: Path, outputPath) -> None:
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="ModalityTable",
@@ -169,11 +116,8 @@ def main(slr: Path) -> None:
     )
     df.columns = df.columns.str.strip()
 
-    modalityCounts = countModalities(df)
-    plotModalities(modalityCounts)
-
-    # modalitiesPerYear = countModalitiesPerYear(df)
-    # plotIntervalTree(modalitiesPerYear)
+    modalityCounts = countModalitiesPerYear(df)
+    plotIntervalTree(modalityCounts, outputPath)
 
 
 if __name__ == "__main__":
