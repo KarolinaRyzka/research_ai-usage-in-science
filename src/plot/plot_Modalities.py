@@ -28,13 +28,15 @@ def wrapLabel(label, width=20):
 
 
 def plotModalities(modalityCounts, outputPath):
-    palette = sns.color_palette("tab20", n_colors=len(modalityCounts))
+    plt.style.use("ggplot")
     dfSorted = modalityCounts.sort_values(by="Count", ascending=False).head(5)
 
     # Apply the wrapping function to the y-axis labels
     dfSorted["Modality"] = dfSorted["Modality"].apply(wrapLabel)
 
-    plot = sns.barplot(data=dfSorted, x="Count", y="Modality", palette=palette)
+    plot = sns.barplot(
+        data=dfSorted, x="Count", y="Modality", palette="colorblind"
+    )
 
     # Add labels on the bars
     for bar in plot.patches:
@@ -58,6 +60,7 @@ def plotModalities(modalityCounts, outputPath):
     plt.tight_layout()
 
     plt.savefig(outputPath)
+    plt.close()
 
 
 @click.command()

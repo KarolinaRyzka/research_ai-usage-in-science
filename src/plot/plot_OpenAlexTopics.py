@@ -29,7 +29,8 @@ def countTopics(df, column_name, topics):
 
 
 def plotTopicCount(df, outputPath):
-    sns.barplot(data=df, x="Topic", y="Count", palette="muted")
+    plt.style.use("ggplot")
+    sns.barplot(data=df, x="Topic", y="Count", palette="colorblind")
 
     for index, row in df.iterrows():
         plt.text(

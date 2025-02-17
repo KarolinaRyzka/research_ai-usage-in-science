@@ -40,6 +40,7 @@ from pandas.core.groupby import DataFrameGroupBy
     ),
 )
 def main(inputPath: Path, outputPath: Path) -> None:
+    plt.style.use("ggplot")
     data: dict[int, int] = {}
 
     df: DataFrame = pandas.read_parquet(
@@ -56,7 +57,7 @@ def main(inputPath: Path, outputPath: Path) -> None:
     for idx, _df in dfgb:
         data[idx] = _df.shape[0]
 
-    sns.barplot(data=data)
+    sns.barplot(data=data, palette="colorblind")
     plt.title(
         label="Total Number of Natural Science PLOS Publications From Search Results"  # noqa: E501
     )

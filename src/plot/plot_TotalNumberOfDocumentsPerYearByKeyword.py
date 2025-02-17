@@ -41,6 +41,7 @@ from pandas.core.groupby import DataFrameGroupBy
     ),
 )
 def main(inputPath: Path, outputPath: Path) -> None:
+    plt.style.use("ggplot")
     data: List[dict[int, str | int]] = []
 
     documentsDF: DataFrame = pandas.read_parquet(
@@ -75,7 +76,9 @@ def main(inputPath: Path, outputPath: Path) -> None:
 
     df: DataFrame = DataFrame(data=data)
 
-    sns.barplot(data=df, x="year", y="amount", hue="Keyword")
+    sns.barplot(
+        data=df, x="year", y="amount", hue="Keyword", palette="colorblind"
+    )
     plt.title(
         label="Total Number of PLOS Publications From Search Results by Keyword"  # noqa:E501
     )

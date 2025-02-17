@@ -61,7 +61,7 @@ def main(
     outputPath: Path,
 ) -> None:
     data: List[dict[str, int | str]] = []
-
+    plt.style.use("ggplot")
     documentsDF: DataFrame = pandas.read_parquet(
         path=documents,
         engine="pyarrow",
@@ -97,7 +97,7 @@ def main(
 
     df: DataFrame = DataFrame(data=data)
 
-    sns.barplot(data=df, x="year", y="amount", hue="class")
+    sns.barplot(data=df, x="year", y="amount", palette="colorblind")
     plt.yscale("log")
     plt.title(label="Total Number of PLOS Publications From Search Results")
     plt.xlabel(xlabel="Year")

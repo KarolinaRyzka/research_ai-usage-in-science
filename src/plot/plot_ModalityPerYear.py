@@ -29,13 +29,13 @@ def countModalitiesPerYear(df):
 
 
 def plotModalitiesPerYear(modalityCountsDF, outputPath):
-    palette = sns.color_palette("tab20", n_colors=len(modalityCountsDF))
+    plt.style.use("ggplot")
     sns.lineplot(
         data=modalityCountsDF,
         x="Year Published",
         y="Count",
         hue="Modality",
-        palette=palette,
+        palette="colorblind",
     )
 
     plt.title("Total Counts of Data Modalities across the SLR by Year")

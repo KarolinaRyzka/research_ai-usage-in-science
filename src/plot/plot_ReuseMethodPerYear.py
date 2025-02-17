@@ -30,7 +30,8 @@ def countReuse(df, column_name):
 
 
 def plotReuseCount(df, outputPath):
-    sns.barplot(data=df, x="Reuse Type", y="Count", palette="muted")
+    plt.style.use("ggplot")
+    sns.barplot(data=df, x="Reuse Type", y="Count", palette="colorblind")
 
     for index, row in df.iterrows():
         plt.text(

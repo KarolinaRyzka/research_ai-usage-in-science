@@ -28,6 +28,7 @@ def countModalitiesPerYear(df):
 
 
 def plotIntervalTree(df, outputPath, ax=None):
+    plt.style.use("ggplot")
     modalities = df["Modality"].unique()
     modality_to_y = {modality: idx for idx, modality in enumerate(modalities)}
 

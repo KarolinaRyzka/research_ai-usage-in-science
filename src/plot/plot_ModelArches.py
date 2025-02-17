@@ -8,12 +8,16 @@ from pandas import DataFrame
 
 
 def plotModelArch(df: DataFrame, outputPath):
+    plt.style.use("ggplot")
     aggregateDf = df.groupby("Architectural Family", as_index=False)[
         "Count"
     ].sum()
 
     sns.barplot(
-        data=aggregateDf, x="Architectural Family", y="Count", palette="muted"
+        data=aggregateDf,
+        x="Architectural Family",
+        y="Count",
+        palette="colorblind",
     )
 
     for index, row in aggregateDf.iterrows():
