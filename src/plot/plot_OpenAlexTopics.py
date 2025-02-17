@@ -28,7 +28,7 @@ def countTopics(df, column_name, topics):
     return result_df
 
 
-def plotTopicCount(df):
+def plotTopicCount(df, outputPath):
     sns.barplot(data=df, x="Topic", y="Count", palette="muted")
 
     for index, row in df.iterrows():
@@ -52,7 +52,7 @@ def plotTopicCount(df):
     ax.set_xticklabels([label.title() for label in df["Topic"]])
     plt.tight_layout()
 
-    plt.show()
+    plt.savefig(outputPath)
 
 
 @click.command()
@@ -70,13 +70,27 @@ def plotTopicCount(df):
         path_type=Path,
     ),
 )
-def main(slr: Path) -> None:
+@click.option(
+    "-o",
+    "--output",
+    "outputPath",
+    nargs=1,
+    required=True,
+    help="Path to write figure to",
+    type=click.Path(
+        exists=False,
+        file_okay=True,
+        writable=True,
+        resolve_path=True,
+        path_type=Path,
+    ),
+)
+def main(slr: Path, outputPath: Path) -> None:
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="Form1",
         engine="openpyxl",
     )
-    # df.columns = df.columns.str.strip()
 
     column_name = "Open Alex Topic Fields\n"
     topics = [
@@ -90,8 +104,7 @@ def main(slr: Path) -> None:
         "Neuroscience",
     ]
     result = countTopics(df, column_name, topics)
-    # print(result)
-    plotTopicCount(result)
+    plotTopicCount(result, outputPath)
 
 
 if __name__ == "__main__":

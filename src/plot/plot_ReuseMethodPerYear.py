@@ -29,7 +29,7 @@ def countReuse(df, column_name):
     return result_df
 
 
-def plotReuseCount(df):
+def plotReuseCount(df, outputPath):
     sns.barplot(data=df, x="Reuse Type", y="Count", palette="muted")
 
     for index, row in df.iterrows():
@@ -53,7 +53,7 @@ def plotReuseCount(df):
     ax.set_xticklabels([label.title() for label in df["Reuse Type"]])
     plt.tight_layout()
 
-    plt.show()
+    plt.savefig(outputPath)
 
 
 @click.command()
@@ -71,7 +71,22 @@ def plotReuseCount(df):
         path_type=Path,
     ),
 )
-def main(slr: Path) -> None:
+@click.option(
+    "-o",
+    "--output",
+    "outputPath",
+    nargs=1,
+    required=True,
+    help="Path to write figure to",
+    type=click.Path(
+        exists=False,
+        file_okay=True,
+        writable=True,
+        resolve_path=True,
+        path_type=Path,
+    ),
+)
+def main(slr: Path, outputPath: Path) -> None:
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="Form1",
@@ -80,8 +95,7 @@ def main(slr: Path) -> None:
     # df.columns = df.columns.str.strip()
     column_name = "What Is The Method Of PTM Re-Use Per Model?"
     reuseCounts = countReuse(df, column_name)
-    # print(reuseCounts)
-    plotReuseCount(reuseCounts)
+    plotReuseCount(reuseCounts, outputPath)
 
 
 if __name__ == "__main__":
