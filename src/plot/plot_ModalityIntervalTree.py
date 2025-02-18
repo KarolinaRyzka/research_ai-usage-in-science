@@ -6,7 +6,7 @@ import pandas
 from pandas import DataFrame
 
 
-def countModalitiesPerYear(df: DataFrame):
+def countModalitiesPerYear(df: DataFrame) -> DataFrame:
     """
     Count the occurrences of each unique modality per year from the 'Modality' column in a DataFrame. # noqa:E501
 
@@ -45,7 +45,7 @@ def countModalitiesPerYear(df: DataFrame):
     return modalityCounts
 
 
-def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None):
+def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None) -> None:
     """
     Generate and save an interval plot showing the distribution of modalities over years. # noqa:E501
 
@@ -112,7 +112,7 @@ def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None):
     plt.savefig(outputPath)
 
 
-def wrapLabel(label: str, width=20):
+def wrapLabel(label: str, width=20) -> str:
     """
     Wrap a label into multiple lines if it contains more than one word.
 

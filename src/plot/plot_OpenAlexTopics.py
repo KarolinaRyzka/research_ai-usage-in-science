@@ -10,7 +10,7 @@ from matplotlib.ticker import MaxNLocator
 from pandas import DataFrame
 
 
-def countTopics(df: DataFrame, column_name: str, topics: List):
+def countTopics(df: DataFrame, column_name: str, topics: List) -> DataFrame:
     """
     Count occurrences of specific topics in a given column of a DataFrame.
 
@@ -47,7 +47,7 @@ def countTopics(df: DataFrame, column_name: str, topics: List):
     return result_df
 
 
-def plotTopicCount(df: DataFrame, outputPath: Path):
+def plotTopicCount(df: DataFrame, outputPath: Path) -> None:
     """
     Generate and save a bar plot showing the total count of OpenAlex topic fields identified in an SLR. # noqa:E501
 

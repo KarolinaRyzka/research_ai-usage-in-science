@@ -7,7 +7,7 @@ import seaborn as sns
 from pandas import DataFrame
 
 
-def countModalitiesPerYear(df: DataFrame):
+def countModalitiesPerYear(df: DataFrame) -> DataFrame:
     """
     Count the occurrences of each unique modality per year from the 'Modality' column in a DataFrame. # noqa:E501
 
@@ -48,7 +48,9 @@ def countModalitiesPerYear(df: DataFrame):
     return modalityCounts
 
 
-def plotModalitiesPerYear(modalityCountsDF: DataFrame, outputPath: Path):
+def plotModalitiesPerYear(
+    modalityCountsDF: DataFrame, outputPath: Path
+) -> None:
     """
     Generate and save a line plot showing the total counts of data modalities over the years. # noqa:E501
 
@@ -82,7 +84,7 @@ def plotModalitiesPerYear(modalityCountsDF: DataFrame, outputPath: Path):
     plt.savefig(outputPath)
 
 
-def wrapLabel(label: str, width=20):
+def wrapLabel(label: str, width=20) -> str:
     """
     Wrap a label into multiple lines if it contains more than one word.
 

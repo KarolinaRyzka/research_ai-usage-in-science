@@ -8,7 +8,7 @@ import seaborn as sns
 from pandas import DataFrame
 
 
-def countModalities(df: DataFrame):
+def countModalities(df: DataFrame) -> DataFrame:
     """
     Count the occurrences of each unique modality in the 'Modality' column of a DataFrame. # noqa:E501
 
@@ -39,7 +39,7 @@ def countModalities(df: DataFrame):
     return modalityCounts
 
 
-def wrapLabel(label: str, width=20):
+def wrapLabel(label: str, width=20) -> str:
     """
     Wrap a label into multiple lines if it contains more than one word.
 
@@ -56,7 +56,7 @@ def wrapLabel(label: str, width=20):
     return "\n".join(label.split()[:2]) if len(label.split()) > 1 else label
 
 
-def plotModalities(modalityCounts, outputPath):
+def plotModalities(modalityCounts, outputPath) -> None:
     """
     Generate and save a bar plot of the top 5 most frequent modalities.
 

@@ -7,7 +7,7 @@ import seaborn as sns
 from pandas import DataFrame
 
 
-def plotModelArch(df: DataFrame, outputPath: Path):
+def plotModelArch(df: DataFrame, outputPath: Path) -> None:
     """
     Generate and save a bar plot showing the total count of models by architecture type. # noqa:E501
 

@@ -9,7 +9,7 @@ from matplotlib.ticker import MaxNLocator
 from pandas import DataFrame
 
 
-def countReuse(df: DataFrame, column_name: str):
+def countReuse(df: DataFrame, column_name: str) -> DataFrame:
     """
     Count occurrences of specific reuse types in a given column of a DataFrame.
 
@@ -45,7 +45,7 @@ def countReuse(df: DataFrame, column_name: str):
     return result_df
 
 
-def plotReuseCount(df: DataFrame, outputPath: Path):
+def plotReuseCount(df: DataFrame, outputPath: Path) -> None:
     """
     Generate and save a bar plot showing the total count of reuse methods for DL models identified in the SLR. # noqa:E501
 
