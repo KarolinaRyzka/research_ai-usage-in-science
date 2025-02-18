@@ -78,8 +78,12 @@ def main(
     :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
     :rtype: None
     """
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
+
     data: List[dict[str, int | str]] = []
-    plt.style.use("ggplot")
     documentsDF: DataFrame = pandas.read_parquet(
         path=documents,
         engine="pyarrow",
@@ -121,9 +125,6 @@ def main(
     plt.xlabel(xlabel="Year")
     plt.ylabel(ylabel="Number of Publications")
     plt.tight_layout()
-
-    # plt.show()
-
     plt.savefig(outputPath)
 
 

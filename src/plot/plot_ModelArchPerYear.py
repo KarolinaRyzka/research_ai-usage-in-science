@@ -23,7 +23,10 @@ def plotModelArch(df: DataFrame, outputPath: Path) -> None:
     :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
     :rtype: None
     """
-    plt.style.use("ggplot")
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
     aggregateDf = df.groupby("Architectural Family", as_index=False)[
         "Count"
     ].sum()
@@ -49,7 +52,6 @@ def plotModelArch(df: DataFrame, outputPath: Path) -> None:
     plt.ylabel("Total Count", fontsize=12)
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
-
     plt.savefig(outputPath)
 
 

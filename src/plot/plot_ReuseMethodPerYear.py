@@ -62,7 +62,10 @@ def plotReuseCount(df: DataFrame, outputPath: Path) -> None:
     :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
     :rtype: None
     """
-    plt.style.use("ggplot")
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
     sns.barplot(data=df, x="Reuse Type", y="Count", palette="colorblind")
 
     for index, row in df.iterrows():
@@ -85,7 +88,6 @@ def plotReuseCount(df: DataFrame, outputPath: Path) -> None:
     ax = plt.gca()
     ax.set_xticklabels([label.title() for label in df["Reuse Type"]])
     plt.tight_layout()
-
     plt.savefig(outputPath)
 
 

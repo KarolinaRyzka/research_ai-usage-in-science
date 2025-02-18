@@ -65,13 +65,17 @@ def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None) -> None:
     :return: None. The function saves the plot to the specified output file and does not return any value. # noqa:E501
     :rtype: None
     """
-    plt.style.use("ggplot")
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
+
     modalities = df["Modality"].unique()
     modality_to_y = {modality: idx for idx, modality in enumerate(modalities)}
 
-    # Plot setup
+    # Plot setup (unique size for this plot)
     if ax is None:
-        fig, ax = plt.subplots(figsize=(10, 12))
+        fig, ax = plt.subplots(figsize=(12, 8))
 
     # Plot intervals or dots
     for _, row in df.iterrows():
@@ -103,12 +107,12 @@ def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None) -> None:
                 fontsize=8,
             )
 
-    # y axis is modality types
     ax.set_yticks(list(modality_to_y.values()))
     ax.set_yticklabels(list(modality_to_y.keys()))
     ax.set_xlabel("Year")
     ax.set_ylabel("Modality")
     ax.set_title("Modalities Distribution Over Years")
+    plt.tight_layout()
     plt.savefig(outputPath)
 
 

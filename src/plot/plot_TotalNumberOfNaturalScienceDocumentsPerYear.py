@@ -55,7 +55,10 @@ def main(inputPath: Path, outputPath: Path) -> None:
     :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
     :rtype: None
     """
-    plt.style.use("ggplot")
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
     data: dict[int, int] = {}
 
     df: DataFrame = pandas.read_parquet(

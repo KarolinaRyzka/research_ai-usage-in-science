@@ -72,7 +72,11 @@ def plotModalities(modalityCounts, outputPath) -> None:
     :return: None. The function saves the plot to the specified output file and does not return any value. # noqa:E501
     :rtype: None
     """
-    plt.style.use("ggplot")
+
+    stylePath = (
+        Path(__file__).resolve().parents[2] / "styles" / "custom.mplstyle"
+    )
+    plt.style.use(stylePath)
     dfSorted = modalityCounts.sort_values(by="Count", ascending=False).head(5)
 
     # Apply the wrapping function to the y-axis labels
@@ -102,9 +106,7 @@ def plotModalities(modalityCounts, outputPath) -> None:
     plt.title("Top 5 Modalities identified across the SLR")
     plt.gca().xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
     plt.tight_layout()
-
     plt.savefig(outputPath)
-    plt.close()
 
 
 @click.command()

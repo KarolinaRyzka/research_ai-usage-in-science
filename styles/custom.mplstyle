@@ -1,0 +1,7 @@
+axes.titlesize : 16
+axes.labelsize : 14
+xtick.labelsize : 12
+ytick.labelsize : 12
+lines.linewidth : 2
+grid.linestyle : --
+figure.figsize : 10, 12
