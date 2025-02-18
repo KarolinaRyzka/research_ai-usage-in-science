@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 import click
 import matplotlib.pyplot as plt
@@ -9,7 +10,25 @@ from matplotlib.ticker import MaxNLocator
 from pandas import DataFrame
 
 
-def countTopics(df, column_name, topics):
+def countTopics(df: DataFrame, column_name: str, topics: List):
+    """
+    Count occurrences of specific topics in a given column of a DataFrame.
+
+    This function iterates through the specified column in the DataFrame and counts # noqa:E501
+    how many times each topic appears. The result is returned as a DataFrame with # noqa:E501
+    two columns: 'Topic' and 'Count'.
+
+    :param df: A pandas DataFrame containing textual data.
+    :type df: pandas.DataFrame
+    :param column_name: The name of the column in which to search for topics.
+    :type column_name: str
+    :param topics: A list of topics to count occurrences for.
+    :type topics: List[str]
+    :return: A DataFrame with two columns:
+             - 'Topic': The unique topic names.
+             - 'Count': The number of occurrences of each topic.
+    :rtype: pandas.DataFrame
+    """
     # Initialize a dictionary to store counts for each topic
     topic_counts = {topic: 0 for topic in topics}
 
@@ -28,7 +47,23 @@ def countTopics(df, column_name, topics):
     return result_df
 
 
-def plotTopicCount(df, outputPath):
+def plotTopicCount(df: DataFrame, outputPath: Path):
+    """
+    Generate and save a bar plot showing the total count of OpenAlex topic fields identified in an SLR. # noqa:E501
+
+    This function takes a DataFrame containing topic counts, creates a bar plot using Seaborn, # noqa:E501
+    and labels each bar with its corresponding count. The x-axis labels are formatted with # noqa:E501
+    title case for readability.
+
+    :param df: A pandas DataFrame containing at least two columns:
+               - 'Topic': The name of the OpenAlex topic field.
+               - 'Count': The frequency of the topic in the dataset.
+    :type df: pandas.DataFrame
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     sns.barplot(data=df, x="Topic", y="Count", palette="colorblind")
 
@@ -87,6 +122,20 @@ def plotTopicCount(df, outputPath):
     ),
 )
 def main(slr: Path, outputPath: Path) -> None:
+    """
+    Process an SLR dataset, count occurrences of OpenAlex topic fields, and generate a bar plot. # noqa:E501
+
+    This function reads an Excel file containing OpenAlex topic fields, counts the occurrences # noqa:E501
+    of predefined topics, and visualizes the results using a bar plot.
+
+    :param slr: The file path to the SLR dataset in Excel format.
+                The file must contain a sheet named 'Form1' with a column listing OpenAlex topics. # noqa:E501
+    :type slr: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="Form1",

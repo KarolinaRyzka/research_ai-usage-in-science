@@ -41,6 +41,23 @@ from pandas.core.groupby import DataFrameGroupBy
     ),
 )
 def main(inputPath: Path, outputPath: Path) -> None:
+    """
+    Process publication data from a Parquet file and generate a bar plot
+    showing the total number of Natural Science PLOS publications per year,
+    grouped by keyword.
+
+    This function reads a Parquet file containing publication data, extracts
+    search keywords from the query URL, groups publications by year and keyword, # noqa:E501
+    counts the number of publications per group, and visualizes the results using # noqa:E501
+    a bar plot.
+
+    :param inputPath: The file path to the Parquet file containing publication data. # noqa:E501
+    :type inputPath: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     data: List[dict[int, str | int]] = []
 

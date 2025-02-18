@@ -40,6 +40,21 @@ from pandas.core.groupby import DataFrameGroupBy
     ),
 )
 def main(inputPath: Path, outputPath: Path) -> None:
+    """
+    Process publication data from a Parquet file and generate a bar plot
+    showing the total number of PLOS publications per year.
+
+    This function reads a Parquet file containing publication data,
+    groups the data by year, counts the number of publications per year,
+    and visualizes the results using a bar plot.
+
+    :param inputPath: The file path to the Parquet file containing publication data. # noqa:E501
+    :type inputPath: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     data: dict[int, int] = {}
 

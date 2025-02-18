@@ -60,6 +60,24 @@ def main(
     ns: Path,
     outputPath: Path,
 ) -> None:
+    """
+    Process publication data from Parquet files and generate a bar plot
+    showing the total number of PLOS publications per year.
+
+    This function reads two Parquet files containing publication data,
+    groups them by year, counts the number of publications in each category
+    ('Total' and 'Natural Science'), and visualizes the data using a bar plot
+    with a logarithmic y-scale.
+
+    :param documents: The file path to the Parquet file containing total publication data.
+    :type documents: Path
+    :param ns: The file path to the Parquet file containing Natural Science publication data. # noqa:E501
+    :type ns: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     data: List[dict[str, int | str]] = []
     plt.style.use("ggplot")
     documentsDF: DataFrame = pandas.read_parquet(

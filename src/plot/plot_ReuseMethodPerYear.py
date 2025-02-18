@@ -9,7 +9,23 @@ from matplotlib.ticker import MaxNLocator
 from pandas import DataFrame
 
 
-def countReuse(df, column_name):
+def countReuse(df: DataFrame, column_name: str):
+    """
+    Count occurrences of specific reuse types in a given column of a DataFrame.
+
+    This function scans a column for occurrences of the reuse types: 'adaptation', # noqa:E501
+    'conceptual', and 'deployment', performing a case-insensitive match. It returns # noqa:E501
+    a DataFrame with counts for each reuse type.
+
+    :param df: A pandas DataFrame containing textual data.
+    :type df: pandas.DataFrame
+    :param column_name: The name of the column in which to search for reuse types. # noqa:E501
+    :type column_name: str
+    :return: A DataFrame with two columns:
+             - 'Reuse Type': The type of reuse detected.
+             - 'Count': The number of occurrences of each reuse type.
+    :rtype: pandas.DataFrame
+    """
     # Initialize a dictionary to store counts
     reuse_counts = {"adaptation": 0, "conceptual": 0, "deployment": 0}
 
@@ -29,7 +45,23 @@ def countReuse(df, column_name):
     return result_df
 
 
-def plotReuseCount(df, outputPath):
+def plotReuseCount(df: DataFrame, outputPath: Path):
+    """
+    Generate and save a bar plot showing the total count of reuse methods for DL models identified in the SLR. # noqa:E501
+
+    This function takes a DataFrame containing reuse method counts, creates a bar plot using Seaborn, # noqa:E501
+    and labels each bar with its corresponding count. The x-axis labels are formatted with # noqa:E501
+    title case for readability.
+
+    :param df: A pandas DataFrame containing at least two columns:
+               - 'Reuse Type': The type of reuse (e.g., 'adaptation', 'conceptual', 'deployment'). # noqa:E501
+               - 'Count': The frequency of each reuse method in the dataset.
+    :type df: pandas.DataFrame
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     sns.barplot(data=df, x="Reuse Type", y="Count", palette="colorblind")
 
@@ -88,12 +120,27 @@ def plotReuseCount(df, outputPath):
     ),
 )
 def main(slr: Path, outputPath: Path) -> None:
+    """
+    Process an SLR dataset to count occurrences of pre-trained model reuse methods # noqa:E501
+    and generate a bar plot.
+
+    This function reads an Excel file containing information about the reuse methods # noqa:E501
+    of pre-trained models, counts occurrences of reuse types ('adaptation', 'conceptual', # noqa:E501
+    'deployment'), and visualizes the results using a bar plot.
+
+    :param slr: The file path to the SLR dataset in Excel format.
+                The file must contain a sheet named 'Form1' with a column specifying reuse methods. # noqa:E501
+    :type slr: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="Form1",
         engine="openpyxl",
     )
-    # df.columns = df.columns.str.strip()
     column_name = "What Is The Method Of PTM Re-Use Per Model?"
     reuseCounts = countReuse(df, column_name)
     plotReuseCount(reuseCounts, outputPath)

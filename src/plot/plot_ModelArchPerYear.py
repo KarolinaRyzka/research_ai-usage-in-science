@@ -7,7 +7,22 @@ import seaborn as sns
 from pandas import DataFrame
 
 
-def plotModelArch(df: DataFrame, outputPath):
+def plotModelArch(df: DataFrame, outputPath: Path):
+    """
+    Generate and save a bar plot showing the total count of models by architecture type. # noqa:E501
+
+    This function takes a DataFrame containing model architectures and their counts, # noqa:E501
+    aggregates the data by architectural family, and produces a bar plot.
+
+    :param df: A pandas DataFrame containing at least two columns:
+               - 'Architectural Family': The category of the model architecture. # noqa:E501
+               - 'Count': The frequency of models in each category.
+    :type df: pandas.DataFrame
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     aggregateDf = df.groupby("Architectural Family", as_index=False)[
         "Count"
@@ -38,7 +53,23 @@ def plotModelArch(df: DataFrame, outputPath):
     plt.savefig(outputPath)
 
 
-def plotModelArchByYear(df: DataFrame, outputPath):
+def plotModelArchByYear(df: DataFrame, outputPath: Path):
+    """
+    Generate and save a line plot showing the count of model architectures identified per year. # noqa:E501
+
+    This function takes a DataFrame containing model architectures and their counts, # noqa:E501
+    aggregates the data by year and architectural family, and produces a line plot to visualize trends. # noqa:E501
+
+    :param df: A pandas DataFrame containing at least three columns:
+               - 'Year': The year in which the model was identified.
+               - 'Architectural Family': The category of the model architecture. # noqa:E501
+               - 'Count': The frequency of models in each category per year.
+    :type df: pandas.DataFrame
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     groupedData = df.groupby(["Year", "Architectural Family"], as_index=False)[
         "Count"
     ].sum()
@@ -92,6 +123,22 @@ def plotModelArchByYear(df: DataFrame, outputPath):
     ),
 )
 def main(mdl: Path, outputPath: Path) -> None:
+    """
+    Process a model architecture dataset and generate a line plot showing trends over time. # noqa:E501
+
+    This script reads a specified model architecture dataset from an Excel file, # noqa:E501
+    extracts relevant data, and generates a line plot to visualize how different # noqa:E501
+    model architectures have been identified over the years. The plot is then saved # noqa:E501
+    to the specified output path.
+
+    :param mdl: The file path to the model architecture dataset in Excel format. # noqa:E501
+                The file must contain a sheet named 'Sheet2'.
+    :type mdl: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     df: DataFrame = pandas.read_excel(
         io=mdl,
         sheet_name="Sheet2",

@@ -6,7 +6,25 @@ import pandas
 from pandas import DataFrame
 
 
-def countModalitiesPerYear(df):
+def countModalitiesPerYear(df: DataFrame):
+    """
+    Count the occurrences of each unique modality per year from the 'Modality' column in a DataFrame. # noqa:E501
+
+    This function processes a pandas DataFrame by:
+
+    - Converting the 'Year Published' column to a numeric year format.
+    - Splitting multiple modalities within a single entry by commas.
+    - Stripping any leading or trailing whitespace from each modality.
+    - Grouping the data by 'Year Published' and 'Modality' to count occurrences. # noqa:E501
+
+    :param df: A pandas DataFrame containing at least two columns:
+               'Modality' (which may contain comma-separated modality names)
+               and 'Year Published' (publication year as a string or numeric value). # noqa:E501
+    :type df: pandas.DataFrame
+    :return: A DataFrame with three columns: 'Year Published' (publication year), # noqa:E501
+             'Modality' (unique modality names), and 'Count' (the number of occurrences per year). # noqa:E501
+    :rtype: pandas.DataFrame
+    """
     df["Year Published"] = pandas.to_datetime(
         df["Year Published"], errors="coerce"
     ).dt.year
@@ -27,7 +45,26 @@ def countModalitiesPerYear(df):
     return modalityCounts
 
 
-def plotIntervalTree(df, outputPath, ax=None):
+def plotIntervalTree(df: DataFrame, outputPath: Path, ax=None):
+    """
+    Generate and save an interval plot showing the distribution of modalities over years. # noqa:E501
+
+    This function visualizes the occurrence of different modalities over time.
+    If a modality appears once in a given year, it is represented as a dot.
+    If it appears multiple times, a horizontal line is drawn from that year to the next. # noqa:E501
+
+    :param df: A pandas DataFrame containing at least three columns:
+               - 'Year Published': The publication year of the modality.
+               - 'Modality': The name of the modality.
+               - 'Count': The frequency of the modality in that year.
+    :type df: pandas.DataFrame
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :param ax: An optional Matplotlib axis object. If None, a new figure and axis will be created. # noqa:E501
+    :type ax: matplotlib.axes.Axes, optional
+    :return: None. The function saves the plot to the specified output file and does not return any value. # noqa:E501
+    :rtype: None
+    """
     plt.style.use("ggplot")
     modalities = df["Modality"].unique()
     modality_to_y = {modality: idx for idx, modality in enumerate(modalities)}
@@ -75,7 +112,20 @@ def plotIntervalTree(df, outputPath, ax=None):
     plt.savefig(outputPath)
 
 
-def wrapLabel(label, width=20):
+def wrapLabel(label: str, width=20):
+    """
+    Wrap a label into multiple lines if it contains more than one word.
+
+    This function splits the label by whitespace and joins the first two words with a newline character. # noqa:E501
+    If the label contains only one word, it is returned unchanged.
+
+    :param label: The input label to be wrapped.
+    :type label: str
+    :param width: The maximum width of the label (currently unused but can be extended for future functionality). # noqa:E501
+    :type width: int, optional
+    :return: The wrapped label with at most two words on the first line, separated by a newline if needed. # noqa:E501
+    :rtype: str
+    """
     return "\n".join(label.split()[:2]) if len(label.split()) > 1 else label
 
 
@@ -110,6 +160,21 @@ def wrapLabel(label, width=20):
     ),
 )
 def main(slr: Path, outputPath) -> None:
+    """
+    Process an SLR results file, extract modality data per year, and generate an interval plot. # noqa:E501
+
+    This script reads a specified SLR (Systematic Literature Review) results file in Excel format, # noqa:E501
+    extracts the 'Modality' column from the "ModalityTable" sheet, counts unique modalities per year, # noqa:E501
+    and generates an interval plot showing their distribution over time. The plot is then saved to the # noqa:E501
+    specified output path.
+
+    :param slr: The file path to the SLR results in Excel format. It must contain a sheet named 'ModalityTable'. # noqa:E501
+    :type slr: Path
+    :param outputPath: The file path where the generated figure will be saved.
+    :type outputPath: Path
+    :return: None. The function processes the data and saves the plot without returning any value. # noqa:E501
+    :rtype: None
+    """
     df: DataFrame = pandas.read_excel(
         io=slr,
         sheet_name="ModalityTable",
